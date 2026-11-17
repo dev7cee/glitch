@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>$GLITCH · The Netrunner Cat</title>
+<meta name="description" content="A stray cat jacked into the chain. Two cyberpunk mini-games, six ICE enemies and a cat with nine lives. Fair launch, no presale.">
+<meta name="theme-color" content="#07060f">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="logo/glitch-logo-yellow-512.png">
+<meta property="og:url" content="https://dev7cee.github.io/glitch/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="$GLITCH · A stray cat jacked into the chain">
+<meta property="og:description" content="Two cyberpunk mini-games, six ICE enemies and a cat with nine lives. Fair launch, no presale.">
+<meta property="og:image" content="https://dev7cee.github.io/glitch/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;600;800&display=swap">
+<style>
+:root{
+  --bg:#07060f;--bg2:#0d0a1e;--panel:#120f27;--panel2:#1a1536;--line:#2d2656;--ink:#eaf6ff;--dim:#8f92bd;
+  --yel:#f5e60a;--mag:#ff2a6d;--cy:#05d9e8;--vio:#8b5cf6;--grn:#22ff88;
+  --fd:"Chakra Petch","Arial Narrow",system-ui,sans-serif;
+  --fm:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--fm);font-size:15px;line-height:1.6;overflow-x:hidden;
+  background-image:radial-gradient(900px 500px at 85% -10%,rgba(255,42,109,.16),transparent 70%),radial-gradient(800px 600px at -10% 30%,rgba(5,217,232,.10),transparent 70%)}
+body.locked{overflow:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:90;background:repeating-linear-gradient(0deg,rgba(255,255,255,.028) 0 1px,transparent 1px 3px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+a{color:var(--cy)}
+::selection{background:var(--yel);color:#000}
+:focus-visible{outline:2px solid var(--yel);outline-offset:3px}
+.pad{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1200px;margin:0 auto}
+h1,h2,h3,h4{font-family:var(--fd);font-weight:700;text-transform:uppercase;line-height:.95;margin:0;letter-spacing:.01em}
+.label{font-family:var(--fm);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.num{font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer;color:inherit}
+.cut{--c:14px;clip-path:polygon(var(--c) 0,100% 0,100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,0 100%,0 var(--c))}
+.btn{--c:10px;display:inline-flex;align-items:center;gap:8px;border:0;background:var(--yel);color:#07060f;font-family:var(--fd);font-weight:700;font-size:15px;letter-spacing:.08em;text-transform:uppercase;padding:12px 20px;text-decoration:none;clip-path:polygon(var(--c) 0,100% 0,100% calc(100% - var(--c)),calc(100% - var(--c)) 100%,0 100%,0 var(--c));transition:transform .15s,filter .15s}
+.btn:hover{transform:translate(-2px,-2px);filter:drop-shadow(4px 4px 0 var(--mag))}
+.btn.ghost{background:var(--panel2);color:var(--ink)}
+.btn.ghost:hover{filter:drop-shadow(4px 4px 0 var(--cy))}
+.btn.mag{background:var(--mag);color:#fff}
+.chip{background:var(--panel);border:1px solid var(--line);color:var(--ink);padding:6px 12px;font-family:var(--fm);font-size:12px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:border-color .2s,color .2s}
+.chip:hover{border-color:var(--cy);color:var(--cy)}
+.chip[aria-pressed=true]{border-color:var(--yel);color:var(--yel)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--mag);flex:none;box-shadow:0 0 10px var(--mag);animation:blink 1.2s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.hazard{height:10px;background:repeating-linear-gradient(-45deg,var(--yel) 0 12px,#07060f 12px 24px)}
+
+/* glitch text */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none}
+.glitch::before{color:var(--mag);transform:translate(-3px,0);mix-blend-mode:screen;animation:gl1 2.6s infinite steps(1)}
+.glitch::after{color:var(--cy);transform:translate(3px,0);mix-blend-mode:screen;animation:gl2 3.1s infinite steps(1)}
+@keyframes gl1{0%{clip-path:inset(0 0 85% 0)}10%{clip-path:inset(40% 0 40% 0);transform:translate(-6px,1px)}20%{clip-path:inset(80% 0 5% 0)}30%,100%{clip-path:inset(100% 0 0 0)}}
+@keyframes gl2{0%{clip-path:inset(70% 0 10% 0)}12%{clip-path:inset(10% 0 75% 0);transform:translate(6px,-1px)}24%{clip-path:inset(45% 0 30% 0)}36%,100%{clip-path:inset(100% 0 0 0)}}
+
+/* ---------- boot intro ---------- */
+.boot{position:fixed;inset:0;z-index:100;background:#030208;display:grid;place-items:center;overflow:hidden;transition:clip-path .9s cubic-bezier(.76,0,.24,1)}
+.boot{clip-path:inset(0 0 0 0)}
+.boot.out{clip-path:inset(50% 0 50% 0);pointer-events:none}
+.boot canvas{position:absolute;inset:0;width:100%;height:100%}
+.boot-in{position:relative;z-index:2;width:min(720px,100%);padding:24px;display:grid;gap:22px}
+.term{font-family:var(--fm);font-size:13px;color:var(--grn);min-height:9.5em;white-space:pre-wrap;text-shadow:0 0 8px rgba(34,255,136,.5)}
+.term b{color:var(--yel);font-weight:600}
+.term i{font-style:normal;color:var(--mag)}
+.boot-bar{height:4px;background:rgba(255,255,255,.08)}
+.boot-bar i{display:block;height:100%;width:0;background:var(--yel);box-shadow:0 0 14px var(--yel)}
+.boot-gate{display:grid;gap:14px;justify-items:start;opacity:0;transform:translateY(16px);transition:opacity .6s,transform .6s}
+.boot.ready .boot-gate{opacity:1;transform:none}
+.boot-title{font-family:var(--fd);font-weight:700;font-size:clamp(76px,16vw,170px);line-height:.82;letter-spacing:-.01em;color:var(--ink)}
+.boot-title em{font-style:normal;color:var(--yel)}
+.boot-sub{color:var(--dim);margin:0;max-width:46ch}
+.boot-cta{display:flex;gap:10px;flex-wrap:wrap}
+.boot-skip{position:absolute;z-index:3;top:max(16px,env(safe-area-inset-top,0px));right:16px;background:transparent;border:1px solid var(--line);color:var(--dim);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:7px 12px}
+.boot-jp{position:absolute;z-index:2;left:16px;bottom:16px;writing-mode:vertical-rl;font-size:13px;letter-spacing:.4em;color:rgba(255,42,109,.6)}
+.flash{position:fixed;inset:0;z-index:99;background:#fff;opacity:0;pointer-events:none}
+.flash.on{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:.85}100%{opacity:0}}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:0;z-index:30;background:rgba(7,6,15,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:10px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo img{width:38px;height:38px;border-radius:8px}
+.logo-name{font-family:var(--fd);font-weight:700;font-size:24px;letter-spacing:.04em}
+.logo-name span{color:var(--yel)}
+nav.links{display:flex;gap:2px}
+nav.links a{color:var(--dim);text-decoration:none;padding:6px 10px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;transition:color .2s,background .2s}
+nav.links a:hover{color:var(--yel);background:var(--panel)}
+.top-actions{display:flex;gap:8px;align-items:center}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line)}
+.icon-btn[aria-pressed=true]{border-color:var(--yel);color:var(--yel)}
+.icon-btn svg{width:18px;height:18px}
+.ticker{overflow:hidden;border-top:1px solid var(--line);background:var(--yel);color:#07060f}
+.ticker-track{display:flex;width:max-content;animation:tick 38s linear infinite}
+.ticker-track span{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:6px 0;white-space:nowrap}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.1fr);gap:32px;align-items:start;padding-block:36px 60px}
+.eyebrow{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy)}
+.hero h1{font-size:clamp(46px,7vw,96px);margin-top:14px;overflow-wrap:anywhere}
+.hero h1 em{font-style:normal;color:var(--yel);text-shadow:3px 0 0 var(--mag),-3px 0 0 var(--cy)}
+.lede{color:var(--dim);max-width:52ch;margin:16px 0 0;font-size:15px}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.badge{font-size:12px;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);padding:5px 10px;color:var(--dim)}
+.badge b{color:var(--grn)}
+.status{margin-top:24px;background:linear-gradient(160deg,var(--panel2),var(--bg2));padding:20px;display:grid;gap:14px;position:relative}
+.status::before{content:"";position:absolute;left:0;top:0;width:90px;height:3px;background:var(--yel)}
+.mc-row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.mc{font-size:clamp(32px,4.6vw,46px);font-weight:800;line-height:1.1;display:inline-block}
+.mc.bump{animation:bump .35s}
+@keyframes bump{30%{color:var(--yel);transform:skewX(-6deg)}}
+.delta{font-size:13px;font-weight:800;margin-left:8px}
+.delta.up{color:var(--grn)}.delta.down{color:var(--mag)}
+.pill{background:var(--bg);border:1px solid var(--line);padding:6px 12px;font-size:13px;font-weight:600;white-space:nowrap}
+.pill b{color:var(--yel)}
+.mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.mini div{background:var(--bg);border:1px solid var(--line);padding:8px 10px;min-width:0}
+.mini b{display:block;font-size:15px}
+.ware{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--bg);border:1px solid var(--line);padding:8px 12px}
+.ware svg{width:34px;height:34px}
+.ware b{display:block;font-family:var(--fd);font-size:19px;text-transform:uppercase;line-height:1.1}
+.lvl{font-size:11px;font-weight:800;color:var(--yel);border:1px solid rgba(245,230,10,.4);padding:3px 8px;white-space:nowrap}
+.ware.up{animation:wup 1.2s}
+@keyframes wup{0%{box-shadow:0 0 0 0 rgba(245,230,10,.8);border-color:var(--yel)}70%{box-shadow:0 0 0 14px rgba(245,230,10,0)}}
+.boss{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding-top:14px;border-top:1px dashed var(--line)}
+.boss-face{width:58px;height:58px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;animation:hover 2.4s ease-in-out infinite}
+.boss-face img{width:48px;height:48px}
+@keyframes hover{50%{transform:translateY(-4px)}}
+.boss-name{font-family:var(--fd);font-size:24px;text-transform:uppercase;line-height:1.05}
+.boss-meta{color:var(--dim);font-size:13px}
+.hp{height:12px;background:var(--bg);border:1px solid var(--line);margin-top:8px;overflow:hidden}
+.hp i{display:block;height:100%;background:repeating-linear-gradient(90deg,var(--mag) 0 10px,#c81e55 10px 12px);transition:width .35s;box-shadow:0 0 12px var(--mag)}
+.hp.hit{animation:hit .3s}
+@keyframes hit{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+.hp-text{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin-top:6px}
+details.demo{margin-top:14px;border:1px dashed var(--line);padding:12px 16px}
+details.demo summary{cursor:pointer;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.demo-body{display:grid;gap:12px;margin-top:12px}
+.demo-body p{margin:0;font-size:13px;color:var(--dim)}
+.row{display:flex;gap:6px;flex-wrap:wrap}
+input[type=range]{width:100%;accent-color:var(--yel)}
+
+.scene{position:relative;overflow:hidden;background:#0a0618;height:min(760px,84vh);min-height:500px;border:1px solid var(--line)}
+.scene canvas{display:block;width:100%;height:100%}
+.scene-tag{position:absolute;left:12px;bottom:12px;background:var(--yel);color:#07060f;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px}
+.feed{position:absolute;top:12px;right:12px;width:min(250px,62%);background:rgba(7,6,15,.78);backdrop-filter:blur(6px);border:1px solid rgba(5,217,232,.35);padding:10px;transition:opacity .4s}
+.scene.celebrate .feed{opacity:0}
+.feed-head{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cy);margin-bottom:6px}
+.feed ol{list-style:none;margin:0;padding:0;display:grid;gap:4px;min-height:30px}
+.feed li{display:grid;grid-template-columns:6px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:12px;padding:4px 6px;background:rgba(255,255,255,.04);animation:slide .3s cubic-bezier(.2,.9,.3,1.2)}
+.feed li i{width:6px;height:14px}
+.feed li.buy i{background:var(--grn);box-shadow:0 0 8px var(--grn)}
+.feed li.sell i{background:var(--mag)}
+.feed li .w{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--dim)}
+.feed li.buy b{color:var(--grn)}.feed li.sell b{color:var(--mag)}
+.feed li.whale{background:rgba(245,230,10,.14);box-shadow:inset 0 0 0 1px rgba(245,230,10,.5)}
+.feed li.whale b{color:var(--yel)}
+@keyframes slide{from{transform:translateX(30px);opacity:0}}
+.alert{position:absolute;left:-5%;right:-5%;top:42%;z-index:2;pointer-events:none;opacity:0;transform:rotate(-4deg)}
+.alert.on{animation:alert 2.3s cubic-bezier(.76,0,.24,1) forwards}
+@keyframes alert{0%{opacity:1;clip-path:inset(0 100% 0 0)}18%{clip-path:inset(0 0 0 0)}80%{clip-path:inset(0 0 0 0);opacity:1}100%{clip-path:inset(0 0 0 100%);opacity:1}}
+.alert-band{background:var(--mag);color:#fff;display:grid;justify-items:center;padding:12px 0 10px;box-shadow:0 0 60px rgba(255,42,109,.6)}
+.alert-band span{font-size:11px;font-weight:800;letter-spacing:.34em;text-transform:uppercase}
+.alert-band b{font-family:var(--fd);font-size:clamp(30px,5vw,50px);line-height:.95;text-transform:uppercase}
+
+/* ---------- sections ---------- */
+section.block{padding-block:72px;border-top:1px solid var(--line)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.block h2{font-size:clamp(38px,5.4vw,70px)}
+.block h2 small{display:block;font-family:var(--fm);font-size:12px;letter-spacing:.2em;color:var(--mag);margin-bottom:10px}
+.intro-txt{color:var(--dim);max-width:62ch;margin:14px 0 0}
+.todo{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--yel);border:1px dashed var(--yel);padding:4px 8px}
+.manifesto{padding-block:80px 90px}
+.mani{font-family:var(--fd);font-weight:700;font-size:clamp(36px,6vw,84px);line-height:.95;text-transform:uppercase;margin:0;max-width:17ch}
+.mani span{color:rgba(234,246,255,.1);transition:color .3s}
+.mani span.on{color:var(--ink)}
+.mani span.hl.on{color:var(--yel)}
+.tapes{position:relative;height:150px;overflow:hidden;margin-inline:calc(50% - 50vw);pointer-events:none}
+.tape{position:absolute;left:-6%;right:-6%;top:50%;padding-block:12px;overflow:hidden}
+.tape.t1{background:var(--yel);transform:translateY(-50%) rotate(-3deg);z-index:2}
+.tape.t2{background:var(--mag);transform:translateY(-50%) rotate(2.4deg)}
+.tape-track{display:flex;width:max-content;animation:tick 30s linear infinite}
+.tape-track.rev{animation-direction:reverse;animation-duration:40s}
+.tape-track span{font-family:var(--fd);font-weight:700;font-size:28px;line-height:1;text-transform:uppercase;white-space:nowrap;padding-right:28px;display:flex;align-items:center;gap:28px}
+.t1 span{color:#07060f}.t2 span{color:#fff}
+.tape-track i{width:10px;height:10px;background:currentColor;transform:rotate(45deg);display:inline-block}
+
+.dossier{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;margin-top:30px;align-items:center}
+.file{position:relative;background:linear-gradient(170deg,var(--panel2),var(--panel));padding:24px;overflow:hidden}
+.file-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.file h3{font-size:26px}
+.file dl{margin:0;display:grid;grid-template-columns:minmax(120px,auto) minmax(0,1fr)}
+.file dt,.file dd{margin:0;padding:10px 0;border-bottom:1px dashed var(--line)}
+.file dt{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-right:12px}
+.file dd{font-weight:600}
+.stamp{position:absolute;right:18px;bottom:20px;transform:rotate(-10deg);border:3px solid var(--mag);color:var(--mag);font-family:var(--fd);font-weight:700;font-size:20px;padding:2px 10px;background:rgba(18,15,39,.8)}
+.cat-art{display:grid;place-items:center;position:relative}
+.cat-art img{width:min(340px,80%);filter:drop-shadow(0 0 30px rgba(5,217,232,.35));animation:hover 4s ease-in-out infinite}
+.cat-art::before{content:"グリッチ";position:absolute;right:0;top:0;writing-mode:vertical-rl;font-size:28px;letter-spacing:.3em;color:rgba(255,42,109,.35)}
+.lore p{color:var(--dim);margin:0 0 14px;max-width:56ch}
+.lore blockquote{margin:18px 0 0;padding:14px 18px;border-left:4px solid var(--yel);background:var(--panel);font-family:var(--fd);font-weight:700;font-size:24px;line-height:1.1;text-transform:uppercase}
+
+.layers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:30px}
+.layer{background:var(--panel);padding:18px;display:grid;gap:10px;align-content:start;position:relative;transition:transform .25s}
+.layer:hover{transform:translateY(-4px)}
+.layer.current{background:linear-gradient(160deg,#2a1240,var(--panel));box-shadow:inset 0 0 0 1px var(--mag)}
+.layer.won{opacity:.75}
+.layer-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.state{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;white-space:nowrap}
+.state.won{background:rgba(34,255,136,.14);color:var(--grn)}
+.state.fight{background:rgba(255,42,109,.18);color:var(--mag)}
+.state.locked{background:var(--bg);color:var(--dim)}
+.layer-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.layer h3{font-size:26px}
+.layer-sub{color:var(--dim);font-size:13px;margin:4px 0 0}
+.layer-boss{width:72px;height:72px;flex:none;animation:hover 3s ease-in-out infinite}
+.layer.won .layer-boss{filter:grayscale(1) brightness(.45);animation:none}
+.layer-line{display:flex;justify-content:space-between;gap:8px;font-size:13px;border-top:1px dashed var(--line);padding-top:9px}
+.layer-line span:first-child{color:var(--dim)}
+.wares{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:14px}
+.wr{background:var(--panel);border:1px solid var(--line);padding:14px;display:grid;gap:6px;align-content:start;position:relative;min-width:0}
+.wr svg{width:42px;height:42px}
+.wr b{font-family:var(--fd);font-size:17px;text-transform:uppercase;line-height:1.1}
+.wr span{font-size:11.5px;color:var(--dim)}
+.wr.locked svg{filter:grayscale(1) brightness(.4)}
+.wr.locked b{color:var(--dim)}
+.wr::after{position:absolute;top:10px;right:10px;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
+.wr.locked::after{content:"Locked";color:var(--dim)}
+.wr.on{border-color:var(--yel);box-shadow:0 0 22px -8px var(--yel)}
+.wr.on::after{content:"Installed";color:var(--yel)}
+.secret{margin-top:16px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:center;padding:26px;background:radial-gradient(500px 260px at 30% 50%,rgba(139,92,246,.18),transparent 70%),#05040c;border:1px solid #241d48}
+.secret-core{aspect-ratio:1;max-width:300px;width:100%;margin:0 auto;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(139,92,246,.25) 0 6deg,transparent 6deg 18deg),radial-gradient(circle,#1b1238 30%,#05040c 70%);box-shadow:0 0 60px -10px rgba(139,92,246,.6);animation:spin 30s linear infinite;display:grid;place-items:center}
+.secret-core span{font-family:var(--fd);font-size:64px;color:rgba(185,168,255,.7);animation:spin 30s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.secret h3{font-size:clamp(24px,3vw,34px);color:#d9d3ff;margin-top:8px}
+.secret p{color:#8a86b8;margin:8px 0 0}
+.redact{display:grid;gap:6px;margin-top:14px}
+.redact span{height:10px;background:linear-gradient(90deg,#1a1838,#2e2860,#1a1838);background-size:200% 100%;animation:scan 2.4s linear infinite}
+.redact span:nth-child(1){width:90%}.redact span:nth-child(2){width:66%}.redact span:nth-child(3){width:48%}
+@keyframes scan{to{background-position:-200% 0}}
+.secret.unlocked{border-color:var(--vio);box-shadow:0 0 40px -10px rgba(139,92,246,.7)}
+
+.game{position:relative;margin-top:26px;height:min(520px,70vh);min-height:400px;overflow:hidden;background:#0a0618;border:1px solid var(--line);touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.game canvas{display:block;width:100%;height:100%}
+.g-hud{position:absolute;top:12px;left:12px;right:12px;display:flex;gap:8px;flex-wrap:wrap;pointer-events:none}
+.g-hud span{background:rgba(7,6,15,.75);border:1px solid var(--line);padding:5px 10px;font-size:12px;display:flex;gap:6px;align-items:center}
+.g-best{margin-left:auto;color:var(--yel)}
+.chip-ico{width:10px;height:10px;background:var(--cy);box-shadow:0 0 8px var(--cy);transform:rotate(45deg);display:inline-block}
+.g-panel{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;gap:12px;padding:24px;background:radial-gradient(closest-side,rgba(7,6,15,.5),rgba(7,6,15,.88))}
+.g-panel h3{font-size:clamp(52px,9vw,100px);line-height:.85}
+.g-panel p{margin:0;color:var(--dim);max-width:40ch}
+.keys{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.keys span{font-size:11px;color:var(--dim);border:1px solid var(--line);padding:3px 9px}
+
+.toko{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:32px;margin-top:30px;align-items:center}
+.ring{position:relative;max-width:340px;width:100%;margin:0 auto;aspect-ratio:1}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .arc{stroke-dasharray:502.6;stroke-dashoffset:502.6;transition:stroke-dashoffset 1.8s cubic-bezier(.3,.6,.3,1)}
+.ring.draw .arc{stroke-dashoffset:0}
+.ring-c{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring-c b{font-family:var(--fd);font-size:clamp(46px,8vw,72px);line-height:1;color:var(--yel)}
+.ring-c span{color:var(--dim);font-size:13px}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{background:var(--panel);padding:16px;display:grid;gap:4px;align-content:start;min-width:0}
+.tile b{font-family:var(--fd);font-size:30px;line-height:1.1;overflow-wrap:anywhere}
+.tile b.ok{color:var(--grn)}
+.tile p{margin:0;color:var(--dim);font-size:13px}
+.fair{margin-top:14px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;border:1px solid rgba(34,255,136,.35);background:rgba(34,255,136,.06);padding:14px}
+.fair-i{width:42px;height:42px;background:var(--grn);color:#07060f;display:grid;place-items:center;font-family:var(--fd);font-size:24px;font-weight:700}
+.fair p{margin:0}
+.contract{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);padding:12px 14px}
+.contract code{flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px}
+
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:30px}
+.step{background:var(--panel);padding:18px;display:grid;gap:8px;align-content:start}
+.step-n{font-family:var(--fd);font-size:40px;line-height:1;color:var(--yel);text-shadow:2px 0 var(--mag)}
+.step h3{font-size:22px}
+.step p{margin:0;color:var(--dim);font-size:13.5px}
+.safety{margin-top:16px;color:var(--yel);font-size:13px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;margin-top:30px}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:14px;align-content:start}
+.checks li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px}
+.box{width:20px;height:20px;border:2px solid var(--line);margin-top:3px}
+.checks b{display:block;font-family:var(--fd);font-size:18px;text-transform:uppercase}
+.checks span{color:var(--dim);font-size:13.5px}
+.comm{background:linear-gradient(160deg,var(--panel2),var(--panel));padding:22px;display:grid;gap:14px;justify-items:start;align-content:start}
+.comm h3{font-size:28px}
+.comm p{margin:0;color:var(--dim)}
+
+footer{position:relative;z-index:1;padding-block:48px 70px;border-top:1px solid var(--line)}
+.foot{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.6fr));gap:28px}
+.foot h4{font-family:var(--fm);font-size:11px;letter-spacing:.16em;color:var(--dim);margin-bottom:10px;font-weight:400}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.foot ul a{color:var(--ink);text-decoration:none}
+.foot ul a:hover{color:var(--yel)}
+.warn{border:2px solid var(--yel);padding:20px;display:grid;gap:10px}
+.warn strong{font-family:var(--fd);font-size:22px;text-transform:uppercase;color:var(--yel);line-height:1.1}
+.warn p{margin:0;color:var(--dim);font-size:13.5px}
+.legal{color:var(--dim);font-size:12px;margin-top:24px}
+.fab{position:fixed;z-index:35;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));width:84px;height:84px;display:grid;place-items:center;text-decoration:none;color:var(--ink);transition:transform .3s}
+.fab:hover{transform:scale(1.07)}
+.fab svg.ring-t{position:absolute;inset:0;width:100%;height:100%;animation:spin 12s linear infinite}
+.fab text{font-family:var(--fm);font-size:9px;letter-spacing:2px;fill:var(--cy)}
+.fab-core{width:46px;height:46px;background:var(--yel);color:#07060f;display:grid;place-items:center;clip-path:polygon(25% 0,100% 0,100% 75%,75% 100%,0 100%,0 25%)}
+.fab-core svg{width:18px;height:18px;margin-left:3px}
+body.locked .fab{opacity:0}
+main{position:relative;z-index:1}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:980px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .scene{order:-1;height:600px;min-height:0}
+  .layers,.steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dossier,.toko,.two,.foot,.secret{grid-template-columns:minmax(0,1fr)}
+  .wares{grid-template-columns:repeat(3,minmax(0,1fr))}
+  nav.links{display:none}
+}
+@media (max-width:560px){
+  .layers,.steps,.tiles{grid-template-columns:minmax(0,1fr)}
+  .wares{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .scene{height:520px}
+  .feed li:nth-child(n+4){display:none}
+  .top .btn{display:none}
+  .fab{width:70px;height:70px}
+  .tapes{height:120px}.tape-track span{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+.rank{font-family:var(--fd);font-weight:700;font-size:clamp(28px,3.6vw,40px);line-height:1.05;text-transform:uppercase;color:var(--yel)}
+.threat{display:flex;gap:4px;align-items:center}
+.threat i{width:14px;height:6px;background:var(--line)}
+.threat i.on{background:var(--mag);box-shadow:0 0 6px var(--mag)}
+.bio{color:var(--dim);font-size:13px;margin:0}
+.toast{position:fixed;z-index:95;left:50%;top:84px;transform:translate(-50%,-20px);opacity:0;pointer-events:none;background:var(--yel);color:#07060f;padding:12px 20px;display:grid;justify-items:center;gap:2px;transition:opacity .3s,transform .3s;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast span{font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
+.toast b{font-family:var(--fd);font-size:24px;text-transform:uppercase;line-height:1}
+.wr small{font-size:10.5px;color:var(--cy)}
+</style>
+</head>
+<body class="locked">
+<!-- BOOT -->
+<div class="boot" id="boot" role="dialog" aria-label="Welcome to $GLITCH">
+  <canvas id="rainCv" aria-hidden="true"></canvas>
+  <button class="boot-skip" id="skip" type="button">Skip intro</button>
+  <div class="boot-jp" aria-hidden="true">グリッチ・ネットランナー</div>
+  <div class="boot-in">
+    <div class="term" id="term" aria-live="polite"></div>
+    <div class="boot-bar" aria-hidden="true"><i id="bootBar"></i></div>
+    <div class="boot-gate">
+      <div class="boot-title glitch" data-text="$GLITCH"><em>$</em>GLITCH</div>
+      <p class="boot-sub">A stray cat jacked into the chain. Two games, six enemies, nine lives.</p>
+      <div class="boot-cta">
+        <button class="btn" id="enterSound" type="button">Jack in · sound on</button>
+        <button class="btn ghost" id="enterMute" type="button">Jack in · silent</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flash" id="flash" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="wrap pad">
+    <a class="logo" href="#top"><img id="logoImg" src="logo/glitch-logo-yellow.svg" alt=""><span class="logo-name"><span>$</span>GLITCH</span></a>
+    <nav class="links" aria-label="Sections">
+      <a href="#story">Story</a><a href="#hack">Hack</a><a href="#ice">The ICE</a><a href="#play">Run</a><a href="#tokenomics">Tokenomics</a><a href="#buy">Buy</a><a href="#community">Community</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="soundBtn" type="button" aria-pressed="false" aria-label="Turn sound on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="waves" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" style="display:none"/><path id="muteX" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+      <a class="btn" href="#buy">Buy $GLITCH</a>
+    </div>
+  </div>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+</header>
+
+<main class="pad" id="top">
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <div class="eyebrow"><span class="dot"></span>Fair launch · Solana</div>
+      <h1>A stray cat <em>jacked into</em> the chain.</h1>
+      <p class="lede">Glitch escaped a corpo lab with a cracked visor and a stolen neural chip. Now she lives on the rooftops of the Sprawl, hacking signals and outrunning drones. Play her games, earn her cyberware, join the crew.</p>
+      <div class="hero-cta"><a class="btn" href="#hack">Play Signal Hack</a><a class="btn ghost" href="#buy">How to buy</a></div>
+      <div class="badges"><span class="badge"><b>No</b> presale</span><span class="badge"><b>0%</b> team allocation</span><span class="badge"><b>0%</b> tax planned</span></div>
+
+      <div class="status cut" aria-live="polite">
+        <div class="mc-row">
+          <div><div class="label">Your netrunner rank</div><div class="rank" id="rank">Street Kid</div></div>
+          <div class="pill" id="implPill">Cyberware <b>1</b> / 6</div>
+        </div>
+        <div class="mini">
+          <div><span class="label">Hack best</span><b class="num" id="sHack">0</b></div>
+          <div><span class="label">Run best</span><b class="num" id="sRun">0 m</b></div>
+          <div><span class="label">Data chips</span><b class="num" id="sChips">0</b></div>
+        </div>
+        <div class="ware" id="wareRow"><span id="wareIco"></span><div style="min-width:0"><span class="label">Latest cyberware</span><b id="wareName">Neon Visor</b></div><span class="lvl" id="wareLvl">MK.1</span></div>
+        <div class="hp-text"><span id="nextUnlock">Next implant: run 250 m in Neon Run</span><span>Saved in this browser</span></div>
+      </div>
+    </div>
+
+    <div class="scene cut" id="hack">
+      <canvas id="hcv" role="img" aria-label="Signal Hack, a memory game: repeat the sequence of glowing nodes"></canvas>
+      <span class="scene-tag" id="hackTag">Signal Hack · memory</span>
+      <div class="g-hud" aria-live="polite"><span>Round <b id="hR">0</b></span><span id="hStatus">Standby</span><span class="g-best">Best <b id="hBest">0</b></span></div>
+      <div class="g-panel" id="hMenu"><span class="label">Mini-game · memory</span><h3>Signal Hack</h3><p>Watch the nodes light up, then repeat the signal before the trace bar runs out. Every round adds a step. Every fifth round, an ICE guardian speeds things up.</p><button class="btn" id="hStart" type="button">Start hack</button><div class="keys"><span>Click or tap the nodes</span><span>Keys 1 to 6</span></div></div>
+      <div class="g-panel" id="hOver" hidden><span class="label">Trace detected</span><h3>Round <span id="hFinal">0</span></h3><p id="hMsg"></p><div class="row" style="justify-content:center"><button class="btn" id="hRetry" type="button">Hack again</button><a class="btn ghost" id="hShare" href="https://x.com" target="_blank" rel="noopener">Share on X</a></div></div>
+    </div>
+  </section>
+
+  <div class="tapes" aria-hidden="true"><div class="tape t1"><div class="tape-track" data-tape="a"></div></div><div class="tape t2"><div class="tape-track rev" data-tape="b"></div></div></div>
+  <section class="manifesto" aria-label="Manifesto"><p class="mani" id="mani">No boss. No presale. No permission. Just a stray cat, a cracked visor and a city that never sleeps. Hack the signal, run the rooftops, stay glitched.</p></section>
+
+  <section class="block" id="story">
+    <h2><small>// subject file</small>Who is Glitch?</h2>
+    <div class="dossier">
+      <div class="file cut">
+        <div class="file-top"><h3>Subject #0001</h3><span class="label">Clearance: none</span></div>
+        <dl>
+          <dt>Species</dt><dd>Street cat, black, one chrome ear</dd>
+          <dt>Origin</dt><dd>Escaped a corpo lab, floor 212</dd>
+          <dt>Implants</dt><dd>One cracked neon visor</dd>
+          <dt>Presale</dt><dd>None</dd>
+          <dt>Promises</dt><dd>None</dd>
+          <dt>Objective</dt><dd>Stay glitched</dd>
+        </dl>
+        <div class="stamp">AT LARGE</div>
+      </div>
+      <div class="cat-art"><img id="catBig" alt="Glitch, a black cat with a chrome ear and a cyan visor"></div>
+    </div>
+    <div class="lore" style="margin-top:28px">
+      <p>They built her as a test subject: a neural chip, a visor, a tracking collar. One blackout later the collar was in a gutter and the cat was on the rooftops, still plugged into something nobody could switch off.</p>
+      <p>Now she hacks stray signals from the rooftops of the Sprawl and outruns the drones that hunt her. The corps sent their ICE after her: a drone, a hound, an enforcer and worse. She's still here. She always lands on her feet.</p>
+      <blockquote>Nine lives. One chain. Zero permission.</blockquote>
+    </div>
+  </section>
+
+  <section class="block" id="ice">
+    <h2><small>// rogues gallery</small>The ICE</h2>
+    <p class="intro-txt">Six guardians hunt stray signals across the Sprawl. You'll meet them in Signal Hack. They're characters in Glitch's story, nothing more.</p>
+    <div class="layers" id="iceCards"></div>
+    <div style="margin-top:36px"><div class="sec-head"><h3 style="font-size:28px">Cyberware</h3><span class="label">Earned by playing · saved in your browser</span></div><div class="wares" id="wares"></div></div>
+    <div class="secret cut" id="secret">
+      <div class="secret-core" aria-hidden="true"><span>?</span></div>
+      <div>
+        <span class="label">Rooftop 7 · ???</span>
+        <h3>Something is waiting above the Sprawl.</h3>
+        <p id="secretTxt">Install all six implants to find out.</p>
+        <div class="redact" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="play">
+    <div class="sec-head"><h2><small>// mini-game</small>Neon Run</h2><span class="label">Beat your record</span></div>
+    <p class="intro-txt">Run the rooftops, jump the gaps, dodge the drones and grab the data chips. The longer you run, the faster the city gets.</p>
+    <div class="game cut" id="game">
+      <canvas id="gcv" role="img" aria-label="Neon Run mini-game"></canvas>
+      <div class="g-hud" aria-live="polite"><span><b id="gD">0</b> m</span><span><i class="chip-ico"></i><b id="gC">0</b></span><span class="g-best">Best <b id="gBest">0</b> m</span></div>
+      <div class="g-panel" id="gMenu"><span class="label">Mini-game</span><h3>Neon Run</h3><p>Tap, click or press Space to jump. Jump again in the air for a double jump.</p><button class="btn" id="gStart" type="button">Run</button><div class="keys"><span>Space / ↑ / W</span><span>Click or tap</span><span>P to pause</span></div></div>
+      <div class="g-panel" id="gOver" hidden><span class="label">Signal lost</span><h3><span id="gFinal">0</span> m</h3><p id="gMsg"></p><div class="row" style="justify-content:center"><button class="btn" id="gRetry" type="button">Run again</button><a class="btn ghost" id="gShare" href="https://x.com" target="_blank" rel="noopener">Share on X</a></div></div>
+      <div class="g-panel" id="gPause" hidden><h3>Paused</h3><button class="btn" id="gResume" type="button">Resume</button></div>
+    </div>
+  </section>
+
+  <section class="block" id="tokenomics">
+    <div class="sec-head"><h2><small>// tokenomics</small>Tokenomics</h2><span class="todo">Proposal, to be confirmed before launch</span></div>
+    <p class="intro-txt">A fair launch: everyone buys at the same moment, at the same starting price. Nothing is reserved beforehand.</p>
+    <div class="toko">
+      <div class="ring" id="ring">
+        <svg viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="80" fill="none" stroke="#1a1536" stroke-width="20"/><circle class="arc" cx="100" cy="100" r="80" fill="none" stroke="#f5e60a" stroke-width="20"/></svg>
+        <div class="ring-c"><b>100%</b><span>of supply to the market</span></div>
+      </div>
+      <div>
+        <div class="tiles">
+          <div class="tile cut"><span class="label">Total supply</span><b class="num">1,000,000,000</b><p>Fixed. No new tokens minted afterwards.</p></div>
+          <div class="tile cut"><span class="label">Buy / sell tax</span><b class="ok">0% / 0%</b><p>No fee taken on trades.</p></div>
+          <div class="tile cut"><span class="label">Presale</span><b class="ok">None</b><p>Nobody buys before the opening.</p></div>
+          <div class="tile cut"><span class="label">Team</span><b class="ok">0% reserved</b><p>We buy at launch like everyone else, with public wallets.</p></div>
+        </div>
+        <div class="fair"><div class="fair-i">=</div><p><b>Same starting line for everyone.</b> No hidden allocation, no special price. Liquidity builds with the first buys.</p></div>
+        <div class="contract"><span class="label">Contract</span><code id="ca">Address published on launch day</code><button class="chip" id="copyCa" type="button" disabled>Copy</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="buy">
+    <h2><small>// how to buy</small>Jack in to $GLITCH</h2>
+    <p class="intro-txt">Four steps on launch day. The official contract address is posted on this site, nowhere else.</p>
+    <div class="steps">
+      <div class="step cut"><span class="step-n">01</span><h3>Get a wallet</h3><p>Install a Solana wallet and write down your recovery phrase offline. Never share it with anyone.</p></div>
+      <div class="step cut"><span class="step-n">02</span><h3>Load SOL</h3><p>Buy SOL on an exchange and send it to your wallet address.</p></div>
+      <div class="step cut"><span class="step-n">03</span><h3>Open the official link</h3><p>Use only the link posted on this page. Check the contract address before you confirm anything.</p></div>
+      <div class="step cut"><span class="step-n">04</span><h3>Swap for $GLITCH</h3><p>Pick an amount, confirm the swap and watch Glitch climb.</p></div>
+    </div>
+    <div class="hero-cta" id="buyLinks" hidden><a class="btn" id="buyPump" href="#" target="_blank" rel="noopener">Buy on pump.fun</a><a class="btn ghost" id="chartDex" href="#" target="_blank" rel="noopener">Chart on DexScreener</a></div>
+    <p class="safety">No one from the team will ever DM you to get you to buy. Ignore any other link.</p>
+  </section>
+
+  <section class="block" id="community">
+    <h2><small>// transparency</small>Transparency and community</h2>
+    <div class="two">
+      <ul class="checks">
+        <li><div class="box" aria-hidden="true"></div><div><b>Locked liquidity</b><span>Lock duration and proof published at launch.</span></div></li>
+        <li><div class="box" aria-hidden="true"></div><div><b>Minting disabled</b><span>No one can mint new $GLITCH or freeze a wallet.</span></div></li>
+        <li><div class="box" aria-hidden="true"></div><div><b>Public team wallets</b><span>Addresses listed here from the first buy.</span></div></li>
+        <li><div class="box" aria-hidden="true"></div><div><b>No promised gains</b><span>No "100x", no price target. The games on this site are just games.</span></div></li>
+      </ul>
+      <div class="comm cut">
+        <h3>Join the stream</h3>
+        <p>Clips, memes, high scores and new games: jack in and play.</p>
+        <div class="row" id="socials"></div>
+        <a class="btn mag" id="shareX" href="https://x.com" target="_blank" rel="noopener">Share $GLITCH on X</a>
+      </div>
+    </div>
+  </section>
+</div>
+</main>
+
+<footer class="pad">
+  <div class="wrap">
+    <div class="hazard" style="margin-bottom:28px" aria-hidden="true"></div>
+    <div class="foot">
+      <div class="warn" role="note">
+        <strong>Virtual currencies, real risks. The only guarantee in crypto is risk.</strong>
+        <p>$GLITCH is a memecoin with no utility or intrinsic value. Its price can crash suddenly and you can lose the entire amount you put in. It is not covered by any deposit guarantee or investor protection scheme. The games and characters on this site are entertainment and say nothing about the price. Only buy what you are prepared to lose.</p>
+      </div>
+      <div><h4>Explore</h4><ul><li><a href="#story">Story</a></li><li><a href="#hack">Signal Hack</a></li><li><a href="#ice">The ICE</a></li><li><a href="#play">Neon Run</a></li><li><a href="#buy">Buy</a></li></ul></div>
+      <div><h4>On-chain</h4><ul><li><a href="#tokenomics">Contract</a></li><li><a href="#community">Lock proofs</a></li><li><a href="#community">Team wallets</a></li></ul></div>
+    </div>
+    <p class="legal">© 2026 $GLITCH · Legal notice and publisher details: to be completed. Glitch is an original character.</p>
+  </div>
+</footer>
+<a class="fab" href="#play" aria-label="Play Neon Run"><svg class="ring-t" viewBox="0 0 100 100" aria-hidden="true"><defs><path id="fc" d="M50,50 m-37,0 a37,37 0 1,1 74,0 a37,37 0 1,1 -74,0"/></defs><text><textPath href="#fc">PLAY · NEON RUN · PLAY · NEON RUN ·</textPath></text></svg><span class="fab-core"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span></a>
+
+<script>
+/* ============ CONFIG: edit this ============
+   Nothing on this site is linked to the token's price or market cap.
+   Edit the contract (display only), the socials, the ICE characters and the cyberware below. */
+const CONFIG = {
+  contract: "",   // paste the pump.fun address (CA) here on launch day: shows it in Tokenomics and turns on the pump.fun / DexScreener buttons. Nothing is fetched.
+  socials: {},
+  ice: [
+    { name:"Sentry Drone",    role:"Patrol unit", color:"#05d9e8", type:"drone",    threat:1, bio:"Street-level eye in the sky. Never blinks, never sleeps." },
+    { name:"ICE Hound",       role:"Tracker",     color:"#ff2a6d", type:"hound",    threat:2, bio:"Sniffs out stray code and bites first." },
+    { name:"Chrome Enforcer", role:"Security",    color:"#f5e60a", type:"enforcer", threat:3, bio:"Corporate muscle with a visor and zero sense of humor." },
+    { name:"Mirrorwall",      role:"Firewall",    color:"#8b5cf6", type:"mirror",   threat:4, bio:"Shows you your own signal until you get lost in it." },
+    { name:"Daemon Swarm",    role:"Botnet",      color:"#22ff88", type:"swarm",    threat:5, bio:"A thousand tiny programs, one very bad idea." },
+    { name:"MOTHER",          role:"Core AI",     color:"#ffffff", type:"mother",   threat:5, bio:"The AI at the center of the Sprawl. Nobody has seen her eye close." }
+  ],
+  // each implant unlocks from your own game progress (saved in your browser)
+  wares: [
+    { name:"Neon Visor",    req:"Starter implant",                  ok:s => true },
+    { name:"Reflex Chip",   req:"Run 250 m in Neon Run",            ok:s => s.run >= 250 },
+    { name:"Static Claws",  req:"Clear round 5 in Signal Hack",     ok:s => s.hack >= 5 },
+    { name:"Ghost Cloak",   req:"Run 600 m in Neon Run",            ok:s => s.run >= 600 },
+    { name:"Packet Cannon", req:"Clear round 10 in Signal Hack",    ok:s => s.hack >= 10 },
+    { name:"Root Access",   req:"Collect 150 data chips in total",  ok:s => s.chips >= 150 }
+  ],
+  ranks: ["Street Kid","Rooftop Runner","Script Kitty","Ghost","Netrunner","Chain Phantom","Legend of Sector 9"]
+};
+/* ============================================ */
+const ICE = CONFIG.ice;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const svgImg = s => { const im = new Image(); im.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(s); return im; };
+
+/* ============ ART (original SVG) ============ */
+const GLOW = '<filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+function catSVG(tail=0){
+  const tx = 178 + tail*8, ty = 106 - tail*4;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220"><defs>${GLOW}
+<linearGradient id="ch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#9aa3c7"/><stop offset="1" stop-color="#3b4166"/></linearGradient>
+<linearGradient id="vs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#05d9e8"/><stop offset=".6" stop-color="#7ff6ff"/><stop offset="1" stop-color="#05d9e8"/></linearGradient>
+<radialGradient id="fur" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#25204a"/><stop offset="1" stop-color="#0b0918"/></radialGradient></defs>
+<path d="M138,194 C176,196 188,160 172,140 C162,126 ${tx-12},${ty+8} ${tx},${ty}" fill="none" stroke="#ff2a6d" stroke-width="7" stroke-linecap="round" filter="url(#g)"/>
+<g transform="translate(${tx},${ty}) rotate(-35)"><rect x="-6" y="-9" width="12" height="14" rx="2" fill="#2b2452" stroke="#ff2a6d" stroke-width="2"/><path d="M-3,-9 v-6 M3,-9 v-6" stroke="#f5e60a" stroke-width="2.4"/></g>
+<path d="M58,204 C50,160 62,128 82,110 L118,110 C138,128 150,160 142,204 Z" fill="url(#fur)"/>
+<path d="M64,200 C57,162 68,132 84,116" fill="none" stroke="#05d9e8" stroke-width="2.2" opacity=".75" filter="url(#g)"/>
+<path d="M136,200 C143,162 132,132 116,116" fill="none" stroke="#ff2a6d" stroke-width="2.2" opacity=".75" filter="url(#g)"/>
+<ellipse cx="80" cy="204" rx="16" ry="8" fill="#0b0918" stroke="#2d2656" stroke-width="2"/><ellipse cx="120" cy="204" rx="16" ry="8" fill="#0b0918" stroke="#2d2656" stroke-width="2"/>
+<path d="M58,72 L54,18 L92,44 Z" fill="#0b0918" stroke="#05d9e8" stroke-width="2" stroke-linejoin="round"/><path d="M62,60 L60,32 L80,46Z" fill="#ff2a6d" opacity=".5"/>
+<path d="M142,72 L146,18 L108,44 Z" fill="url(#ch)" stroke="#eaf6ff" stroke-width="1.6" stroke-linejoin="round"/><circle cx="136" cy="44" r="2.4" fill="#2b2452"/><path d="M128,58 L140,34" stroke="#3b4166" stroke-width="1.6"/>
+<path d="M100,38 C130,38 148,58 148,82 C148,106 126,120 100,120 C74,120 52,106 52,82 C52,58 70,38 100,38Z" fill="url(#fur)" stroke="#2d2656" stroke-width="2"/>
+<path d="M60,74 Q100,62 140,74 L138,94 Q100,85 62,94 Z" fill="url(#vs)" filter="url(#g)"/>
+<path d="M60,74 Q100,62 140,74" fill="none" stroke="#eaf6ff" stroke-width="1.4" opacity=".8"/>
+<path d="M120,70 l-6,9 l6,3 l-8,9" fill="none" stroke="#07060f" stroke-width="2.2" stroke-linejoin="round"/>
+<rect x="72" y="76" width="18" height="4" fill="#eaf6ff" opacity=".7"/><rect x="96" y="75" width="6" height="4" fill="#eaf6ff" opacity=".5"/>
+<path d="M96,100 l8,0 l-4,5z" fill="#ff2a6d"/><path d="M92,108 q4,4 8,0 q4,4 8,0" fill="none" stroke="#8f92bd" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M78,102 L44,96 M78,106 L46,108 M122,102 L156,96 M122,106 L154,108" stroke="#05d9e8" stroke-width="1.1" opacity=".55"/>
+<path d="M72,114 Q100,126 128,114 L128,123 Q100,135 72,123Z" fill="#f5e60a"/>
+<path d="M92,128 l8,-4 l8,4 l0,10 l-8,4 l-8,-4z" fill="#07060f" stroke="#f5e60a" stroke-width="2"/><text x="100" y="137" font-family="monospace" font-size="10" font-weight="700" fill="#f5e60a" text-anchor="middle">G</text>
+</svg>`;
+}
+function bossSVG(type, c){
+  const S = (b) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><defs>${GLOW}</defs><g filter="url(#g)" fill="#0b0918" stroke="${c}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">${b}</g></svg>`;
+  if (type === "drone") return S(`<path d="M32,46 L14,34 M68,46 L86,34"/><ellipse cx="14" cy="32" rx="13" ry="3"/><ellipse cx="86" cy="32" rx="13" ry="3"/><circle cx="50" cy="52" r="19"/><circle cx="50" cy="52" r="8" fill="${c}"/><circle cx="47" cy="49" r="2.5" fill="#fff" stroke="none"/><path d="M50,33 V20"/><circle cx="50" cy="18" r="2.5" fill="#ff2a6d" stroke="#ff2a6d"/><path d="M38,70 L34,80 M62,70 L66,80"/>`);
+  if (type === "hound") return S(`<path d="M18,40 L34,16 L44,34 L56,34 L66,16 L82,40 L74,70 L50,88 L26,70 Z"/><path d="M30,48 L44,52 L42,58 L30,54Z M70,48 L56,52 L58,58 L70,54Z" fill="${c}"/><path d="M38,72 L44,68 L50,74 L56,68 L62,72" /><path d="M50,36 V60" stroke-width="1.4" opacity=".6"/>`);
+  if (type === "enforcer") return S(`<path d="M26,32 Q50,8 74,32 L76,70 Q50,90 24,70 Z"/><rect x="30" y="42" width="40" height="10" fill="${c}"/><path d="M34,64 H66 M36,70 H64 M38,76 H62" stroke-width="1.8"/><path d="M22,40 L14,46 L22,52 M78,40 L86,46 L78,52"/>`);
+  if (type === "mirror") return S(`<path d="M50,8 L86,29 L86,71 L50,92 L14,71 L14,29Z"/><path d="M50,22 L74,36 L74,64 L50,78 L26,64 L26,36Z" opacity=".7"/><path d="M30,50 Q50,34 70,50 Q50,66 30,50Z"/><circle cx="50" cy="50" r="7" fill="${c}"/><path d="M20,26 L80,74" stroke-width="1" opacity=".5"/>`);
+  if (type === "swarm"){ let t = ""; for (let k=0;k<9;k++){ const a = k/9*Math.PI*2, x = 50+Math.cos(a)*32, y = 50+Math.sin(a)*32; t += `<path d="M50,50 L${x.toFixed(1)},${y.toFixed(1)}" stroke-width="1" opacity=".5"/><path transform="translate(${x.toFixed(1)},${y.toFixed(1)}) rotate(${(a*57.3+90).toFixed(0)})" d="M0,-7 L6,5 L-6,5Z"/>`; }
+    return S(t + `<path d="M50,38 L62,50 L50,62 L38,50Z" fill="${c}"/>`); }
+  return S(`<circle cx="50" cy="50" r="40" stroke-dasharray="4 5"/><circle cx="50" cy="50" r="30"/><path d="M18,50 Q50,22 82,50 Q50,78 18,50Z"/><circle cx="50" cy="50" r="12" fill="${c}"/><circle cx="50" cy="50" r="5" fill="#07060f" stroke="none"/><circle cx="46" cy="46" r="2" fill="#fff" stroke="none"/>`);
+}
+function wareSVG(k, on){
+  const c = on ? "#f5e60a" : "#8f92bd";
+  const P = [
+    `<path d="M6,20 Q24,12 42,20 L41,28 Q24,22 7,28Z" fill="${c}" opacity=".9"/>`,
+    `<rect x="13" y="13" width="22" height="22"/><rect x="19" y="19" width="10" height="10" fill="${c}"/><path d="M18,13V7M24,13V7M30,13V7M18,35v6M24,35v6M30,35v6M13,18H7M13,24H7M13,30H7M35,18h6M35,24h6M35,30h6"/>`,
+    `<path d="M12,8 Q20,24 12,40 M22,6 Q32,24 22,42 M32,8 Q40,24 32,40"/>`,
+    `<path d="M10,42 V20 Q10,6 24,6 Q38,6 38,20 V42 L32,37 L27,42 L21,37 L16,42Z"/><circle cx="19" cy="20" r="2.4" fill="${c}"/><circle cx="29" cy="20" r="2.4" fill="${c}"/>`,
+    `<rect x="6" y="18" width="26" height="12"/><path d="M32,20 H42 V28 H32 M12,30 V38 H20 V30"/><circle cx="44" cy="24" r="2" fill="${c}"/>`,
+    `<path d="M8,12 H40 V36 H8Z"/><path d="M13,20 l5,4 l-5,4 M22,30 H32" />`
+  ][k];
+  return `<svg viewBox="0 0 48 48" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P}</svg>`;
+}
+const CAT = [0,1,2,3].map(k=>svgImg(catSVG(Math.sin(k/4*Math.PI*2))));
+const BOSS = {}; ICE.forEach(e=>{ BOSS[e.type] = svgImg(bossSVG(e.type, e.color)); });
+$("catBig").src = CAT[0].src;
+
+/* ============ SOUND (synthesized) ============ */
+const Sound = {
+  ac:null, out:null, on:false, hum:null, last:{},
+  init(){
+    if (!this.ac){
+      const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+      try { this.ac = new AC(); } catch(e){ return false; }
+      this.out = this.ac.createGain(); this.out.gain.value = .45;
+      const comp = this.ac.createDynamicsCompressor(); this.out.connect(comp); comp.connect(this.ac.destination);
+      const n = Math.floor(this.ac.sampleRate*1.5), b = this.ac.createBuffer(1,n,this.ac.sampleRate), d = b.getChannelData(0);
+      for (let i=0;i<n;i++) d[i] = Math.random()*2-1; this.noiseBuf = b;
+    }
+    if (this.ac.state === "suspended") this.ac.resume();
+    return true;
+  },
+  ok(k, gap=.06){ if (!this.on || !this.ac) return false; const t = this.ac.currentTime; if (t - (this.last[k]||0) < gap) return false; this.last[k] = t; return true; },
+  tone(f, t, dur, type="square", vol=.08, slide){
+    const a=this.ac, o=a.createOscillator(), g=a.createGain(); o.type=type; o.frequency.setValueAtTime(f,t);
+    if (slide) o.frequency.exponentialRampToValueAtTime(slide, t+dur*.9);
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.005); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g); g.connect(this.out); o.start(t); o.stop(t+dur+.05);
+  },
+  noise(t, dur, vol, type="bandpass", f=1200, f2){
+    const a=this.ac, s=a.createBufferSource(), fl=a.createBiquadFilter(), g=a.createGain(); s.buffer=this.noiseBuf; fl.type=type; fl.frequency.setValueAtTime(f,t);
+    if (f2) fl.frequency.exponentialRampToValueAtTime(f2, t+dur);
+    g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.0001,t+dur); s.connect(fl); fl.connect(g); g.connect(this.out); s.start(t, Math.random()); s.stop(t+dur+.05);
+  },
+  startHum(){ if (!this.ac || this.hum) return; const a=this.ac, g=a.createGain(), f=a.createBiquadFilter(); f.type="lowpass"; f.frequency.value=320; g.gain.value=0;
+    [55,55.4,82.4].forEach(fr=>{ const o=a.createOscillator(); o.type="sawtooth"; o.frequency.value=fr; o.connect(f); o.start(); });
+    const lfo=a.createOscillator(), lg=a.createGain(); lfo.frequency.value=.08; lg.gain.value=140; lfo.connect(lg); lg.connect(f.frequency); lfo.start();
+    f.connect(g); g.connect(this.out); g.gain.setTargetAtTime(.05, a.currentTime, 2); this.hum=g; },
+  stopHum(){ if (this.hum){ this.hum.gain.setTargetAtTime(0, this.ac.currentTime, .3); const h=this.hum; this.hum=null; setTimeout(()=>h.disconnect(), 1500); } },
+  key(){ if (!this.ok("key",.03)) return; this.tone(1800+Math.random()*600, this.ac.currentTime, .03, "square", .02); },
+  blip(){ if (!this.ok("blip",.05)) return; this.tone(2400, this.ac.currentTime, .04, "sine", .02); },
+  jackIn(){ if (!this.on || !this.init()) return; const t=this.ac.currentTime+.02;
+    this.tone(80,t,.9,"sawtooth",.12,1600); this.noise(t,.8,.25,"highpass",400,6000);
+    [523,659,784,1046,1318].forEach((f,i)=>this.tone(f,t+.75+i*.06,.25,"square",.05));
+    this.tone(60,t+.75,.9,"sine",.4,30); this.noise(t+.75,.6,.35,"lowpass",3000,200); },
+  buy(size){ if (!this.ok("trade",.1)) return; const t=this.ac.currentTime, f=660*Math.pow(2,size*.7);
+    this.tone(f,t,.08,"square",.04); this.tone(f*1.5,t+.05,.1,"square",.035); if (size>.7) this.tone(f*2,t+.1,.18,"square",.04); },
+  sell(){ if (!this.ok("trade",.1)) return; this.tone(180,this.ac.currentTime,.18,"sawtooth",.05,90); },
+  hit(){ if (!this.ok("hit",.08)) return; const t=this.ac.currentTime; this.noise(t,.08,.18,"bandpass",2400); this.tone(320,t,.08,"square",.04,120); },
+  zap(){ if (!this.ok("zap",.12)) return; const t=this.ac.currentTime; this.tone(90,t,.25,"sawtooth",.07,40); this.noise(t,.2,.2,"lowpass",900,200); },
+  roar(){ if (!this.ok("roar",1)) return; const t=this.ac.currentTime; this.tone(70,t,1.2,"sawtooth",.1,45); this.tone(73,t,1.2,"square",.05,47); this.noise(t,1,.2,"bandpass",500,120); [0,.18,.36].forEach(d=>this.tone(1400,t+d,.1,"square",.03)); },
+  breach(final){ if (!this.ok("breach",.5)) return; const t=this.ac.currentTime+.02; this.noise(t,.7,.4,"highpass",800,9000); this.tone(50,t,.8,"sine",.5,28);
+    const seq = final ? [523,659,784,1046,1318,1568,2093] : [659,784,1046,1318]; seq.forEach((f,i)=>this.tone(f,t+.2+i*.08,.3,"square",.05)); },
+  jump(){ if (!this.ok("jump",.04)) return; this.tone(300,this.ac.currentTime,.14,"square",.05,700); },
+  coin(){ if (!this.ok("coin",.03)) return; const t=this.ac.currentTime; this.tone(1568,t,.06,"square",.035); this.tone(2093,t+.05,.1,"square",.035); },
+  crash(){ if (!this.on || !this.ac) return; const t=this.ac.currentTime; this.noise(t,.5,.35,"lowpass",2000,100); [440,330,247,165].forEach((f,i)=>this.tone(f,t+i*.12,.2,"square",.05)); }
+};
+function setSound(on){
+  Sound.on = !!(on && Sound.init());
+  if (Sound.on) Sound.startHum(); else Sound.stopHum();
+  const b = $("soundBtn"); b.setAttribute("aria-pressed", Sound.on); b.setAttribute("aria-label", Sound.on ? "Turn sound off" : "Turn sound on");
+  $("waves").style.display = Sound.on ? "" : "none"; $("muteX").style.display = Sound.on ? "none" : "";
+}
+$("soundBtn").onclick = () => setSound(!Sound.on);
+
+/* ============ BOOT INTRO ============ */
+const RC = $("rainCv"), rctx = RC.getContext("2d");
+let RW=0, RH=0, rdpr=1, bootDone=false;
+const drops = Array.from({length:70},()=>({x:Math.random(), y:Math.random(), s:.4+Math.random()*1.2, ch:[]}));
+const GLYPHS = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホ$#%&";
+function rsize(){ rdpr=Math.min(2,devicePixelRatio||1); RW=innerWidth; RH=innerHeight; RC.width=RW*rdpr; RC.height=RH*rdpr; }
+addEventListener("resize", rsize); rsize();
+function rainFrame(){
+  if (bootDone) return;
+  rctx.setTransform(rdpr,0,0,rdpr,0,0);
+  rctx.fillStyle="rgba(3,2,8,.18)"; rctx.fillRect(0,0,RW,RH);
+  rctx.font="14px 'JetBrains Mono', monospace";
+  drops.forEach((d,i)=>{ d.y += .006*d.s; if (d.y > 1.1){ d.y = -.1; d.x = Math.random(); }
+    const x = d.x*RW, y = d.y*RH; rctx.fillStyle = i%7===0 ? "rgba(255,42,109,.85)" : "rgba(34,255,136,.75)";
+    rctx.fillText(GLYPHS[Math.floor(Math.random()*GLYPHS.length)], x, y);
+    rctx.fillStyle = "rgba(34,255,136,.18)"; rctx.fillText(GLYPHS[(i*7+Math.floor(d.y*40))%GLYPHS.length], x, y-16); });
+  requestAnimationFrame(rainFrame);
+}
+if (!reduce) requestAnimationFrame(rainFrame);
+const BOOT_LINES = [
+  "> NEUROLINK BIOS v0.9 ......... <b>OK</b>",
+  "> mounting /dev/glitch ......... <b>OK</b>",
+  "> locating stray signal ........ <b>FOUND</b>  [sector 9, rooftop 212]",
+  "> bypassing street ICE ......... <i>6 HUNTERS DETECTED</i>",
+  "> presale ...................... <b>NONE</b>",
+  "> handshake with the chain ..... <b>READY</b>"
+];
+(function boot(){
+  const term = $("term"), bar = $("bootBar"); let li = 0, ci = 0, out = "";
+  const plain = BOOT_LINES.map(l=>l.replace(/<[^>]+>/g,""));
+  function step(){
+    if (bootDone) return;
+    if (li >= BOOT_LINES.length){ bar.style.width = "100%"; setTimeout(()=>$("boot").classList.add("ready"), 250); return; }
+    ci += reduce ? 999 : 3;
+    if (ci >= plain[li].length){ out += BOOT_LINES[li] + "\n"; li++; ci = 0; term.innerHTML = out; bar.style.width = (li/BOOT_LINES.length*100) + "%"; setTimeout(step, reduce ? 0 : 140); return; }
+    term.innerHTML = out + plain[li].slice(0, ci) + "█"; Sound.key();
+    setTimeout(step, 16);
+  }
+  step();
+})();
+function enter(withSound){
+  if (bootDone) return; bootDone = true;
+  setSound(withSound); if (withSound) Sound.jackIn();
+  const f = $("flash"); f.classList.remove("on"); void f.offsetWidth; if (!reduce) f.classList.add("on");
+  $("boot").classList.add("out"); document.body.classList.remove("locked");
+  setTimeout(()=>{ $("boot").hidden = true; }, 950);
+}
+$("enterSound").onclick = ()=>enter(true);
+$("enterMute").onclick = ()=>enter(false);
+$("skip").onclick = ()=>enter(false);
+
+/* ============ PROFILE (local progress, no market data) ============ */
+let stats = { run:0, hack:0, chips:0, games:0 };
+try { stats = Object.assign(stats, JSON.parse(localStorage.getItem("glitch_profile") || "{}")); } catch(e){}
+const saveStats = () => { try { localStorage.setItem("glitch_profile", JSON.stringify(stats)); } catch(e){} };
+let owned = CONFIG.wares.map(w=>w.ok(stats));
+const toastEl = document.createElement("div"); toastEl.className = "toast"; toastEl.setAttribute("role","status"); toastEl.innerHTML = "<span>Cyberware installed</span><b></b>"; document.body.appendChild(toastEl);
+let toastQ = [], toastBusy = false;
+function toast(name){ toastQ.push(name); if (toastBusy) return; const next = () => { const n = toastQ.shift(); if (!n){ toastBusy = false; return; } toastBusy = true; toastEl.querySelector("b").textContent = n; toastEl.classList.add("on"); Sound.breach(false); setTimeout(()=>{ toastEl.classList.remove("on"); setTimeout(next, 400); }, 2200); }; next(); }
+CONFIG.wares.forEach((w,k)=>{ const d = document.createElement("div"); d.className = "wr"; d.id = "wr"+k; d.innerHTML = `<span class="wi"></span><b>${w.name}</b><span>${w.req}</span><small></small>`; $("wares").appendChild(d); });
+ICE.forEach((e,i)=>{
+  const c = document.createElement("article"); c.className = "layer cut";
+  c.innerHTML = `<div class="layer-top"><span class="label">${e.role}</span><span class="threat" aria-label="Threat level ${e.threat} of 5">${[1,2,3,4,5].map(k=>`<i class="${k<=e.threat?"on":""}"></i>`).join("")}</span></div>
+    <div class="layer-head"><div><h3>${e.name}</h3><p class="layer-sub">${e.bio}</p></div><img class="layer-boss" src="${BOSS[e.type].src}" alt=""></div>
+    <div class="layer-line"><span>Shows up in</span><b>Signal Hack · round ${(i+1)*5}</b></div>`;
+  $("iceCards").appendChild(c);
+});
+function renderProfile(){
+  const now = CONFIG.wares.map(w=>w.ok(stats));
+  now.forEach((v,k)=>{ if (v && !owned[k]) toast(CONFIG.wares[k].name); }); owned = now;
+  const n = owned.filter(Boolean).length, last = owned.lastIndexOf(true);
+  $("rank").textContent = CONFIG.ranks[Math.min(CONFIG.ranks.length-1, n)];
+  $("implPill").innerHTML = `Cyberware <b>${n}</b> / ${CONFIG.wares.length}`;
+  $("sHack").textContent = stats.hack; $("sRun").textContent = stats.run + " m"; $("sChips").textContent = stats.chips;
+  $("wareName").textContent = CONFIG.wares[last].name; $("wareLvl").textContent = "MK." + n; $("wareIco").innerHTML = wareSVG(last, true);
+  const nx = owned.indexOf(false); $("nextUnlock").textContent = nx < 0 ? "All implants installed" : "Next implant: " + CONFIG.wares[nx].req.charAt(0).toLowerCase() + CONFIG.wares[nx].req.slice(1);
+  CONFIG.wares.forEach((w,k)=>{ const d = $("wr"+k); d.classList.toggle("locked", !owned[k]); d.classList.toggle("on", owned[k]); d.querySelector(".wi").innerHTML = wareSVG(k, owned[k]); d.querySelector("small").textContent = owned[k] ? "" : "Locked"; });
+  const all = n === CONFIG.wares.length; $("secret").classList.toggle("unlocked", all);
+  $("secretTxt").textContent = all ? "Signal received. Rooftop 7 opens soon. Keep an eye on this site." : "Install all six implants to find out.";
+  const w = $("wareRow"); w.classList.remove("up"); void w.offsetWidth; w.classList.add("up");
+}
+function onRunEnd(m, chips){ stats.run = Math.max(stats.run, m); stats.chips += chips; stats.games++; saveStats(); renderProfile(); }
+function onHackEnd(r){ stats.hack = Math.max(stats.hack, r); stats.games++; saveStats(); renderProfile(); }
+(function ticker(){
+  const p = ["$GLITCH","No presale","A stray cat jacked into the chain","Play Signal Hack","Run the rooftops","Nine lives, zero permission","Virtual currencies, real risks"];
+  const one = p.map(x=>x+"  ///  ").join(""); $("ticker").innerHTML = `<span>${one}${one}</span><span>${one}${one}</span>`;
+  $("shareX").href = "https://x.com/intent/post?text=" + encodeURIComponent("I'm jacked in with $GLITCH, the netrunner cat. Beat my scores in Signal Hack and Neon Run.");
+})();
+Object.entries(CONFIG.socials).forEach(([n,url])=>{
+  const a = document.createElement(url ? "a" : "span"); a.className = "chip";
+  if (url){ a.href = url; a.target = "_blank"; a.rel = "noopener"; a.textContent = n; } else { a.textContent = n + " · soon"; a.style.opacity = ".7"; }
+  $("socials").appendChild(a);
+});
+CONFIG.contract = (CONFIG.contract || "").trim();
+if (CONFIG.contract){
+  const pumpUrl = "https://pump.fun/coin/" + CONFIG.contract;
+  $("buyLinks").hidden = false; $("buyPump").href = pumpUrl; $("chartDex").href = "https://dexscreener.com/solana/" + CONFIG.contract;
+  document.querySelectorAll('.top a.btn[href="#buy"]').forEach(a=>{ a.href = pumpUrl; a.target = "_blank"; a.rel = "noopener"; });
+  $("ca").textContent = CONFIG.contract; const b = $("copyCa"); b.disabled = false;
+  b.onclick = ()=>{ navigator.clipboard.writeText(CONFIG.contract).then(()=>{ b.textContent="Copied"; setTimeout(()=>b.textContent="Copy",1500); }).catch(()=>{}); };
+}
+
+/* ============ MINI-GAME: SIGNAL HACK (memory) ============ */
+let T = 0;
+(function(){
+  const box = $("hack"), cv = $("hcv"), ctx = cv.getContext("2d");
+  const COLS = ["#05d9e8","#ff2a6d","#f5e60a","#8b5cf6","#22ff88","#ff8a3d"], GL = ["ア","ネ","オ","ン","デ","タ"], FREQ = [523,587,659,784,880,1046];
+  let W=0, H=0, dpr=1, visible=true, running=false, lastT=0;
+  let state = "menu", seq = [], pos = 0, round = 0, best = 0, lit = [0,0,0,0,0,0], showT = 0, showI = 0, trace = 1, msgTxt = "", msgT = 0, msgC = "#fff", shake = 0, boss = null, parts = [], catMood = 0;
+  try { best = +localStorage.getItem("signalhack_best") || 0; } catch(e){}
+  $("hBest").textContent = best;
+  const rain = Array.from({length:110},()=>({x:Math.random(), y:Math.random(), s:.7+Math.random()*.8}));
+  const sky = Array.from({length:22},(_,k)=>({x:k/22 + Math.random()*.02, w:.04+Math.random()*.05, h:.12+Math.random()*.3, c:Math.random()<.5}));
+  function size(){ const r = cv.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio||1); W = r.width; H = r.height; cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); kick(); }
+  new ResizeObserver(size).observe(cv);
+  new IntersectionObserver(es=>es.forEach(e=>{ visible = e.isIntersecting; if (visible) kick(); })).observe(box);
+  const geo = () => { const R = Math.min(W*.36, H*.27), cx = W/2, cy = H*.4, r = clamp(R*.32, 30, 52); return {cx, cy, R, r, nodes: COLS.map((_,i)=>{ const a = -Math.PI/2 + i*Math.PI/3; return {x:cx+Math.cos(a)*R, y:cy+Math.sin(a)*R}; })}; };
+  const tone = i => { if (!Sound.on || !Sound.ac) return; const t = Sound.ac.currentTime; Sound.tone(FREQ[i], t, .28, "square", .05); Sound.tone(FREQ[i]*2, t, .18, "sine", .03); };
+  const say = (t, c, d=1.2) => { msgTxt = t; msgC = c; msgT = d; };
+  const status = t => $("hStatus").textContent = t;
+  const speed = () => Math.max(.2, .55 - round*.02) * (boss ? .7 : 1);
+  function start(){ seq = []; round = 0; state = "pause"; $("hMenu").hidden = true; $("hOver").hidden = true; $("hR").textContent = 0; nextRound(.6); kick(); }
+  function nextRound(delay){
+    round++; $("hR").textContent = round;
+    boss = round % 5 === 0 ? ICE[Math.min(ICE.length-1, round/5 - 1)] : null;
+    seq.push(Math.floor(Math.random()*6)); pos = 0;
+    if (boss){ say(boss.name.toUpperCase() + " ONLINE", boss.color, 1.6); Sound.roar(); } else say("ROUND " + round, "#f5e60a", 1);
+    state = "pause"; status("Incoming signal");
+    setTimeout(()=>{ state = "show"; showI = 0; showT = boss ? -.2 : 0; }, (delay + (boss ? .8 : 0))*1000);
+  }
+  function press(i){
+    if (state !== "input") return;
+    lit[i] = 1; tone(i);
+    const g = geo(); for (let k=0;k<10;k++){ const a = Math.random()*7, v = 1+Math.random()*3; parts.push({x:g.nodes[i].x, y:g.nodes[i].y, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:1, c:COLS[i]}); }
+    if (i !== seq[pos]){ fail(); return; }
+    pos++; trace = 1;
+    if (pos >= seq.length){
+      state = "pause"; catMood = 1; say(boss ? "ICE BROKEN" : "ACCESS GRANTED", "#22ff88", 1); status("Access granted");
+      for (let k=0;k<40;k++){ const a = Math.random()*7, v = 2+Math.random()*5; parts.push({x:g.cx, y:g.cy, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:1.3, c:COLS[k%6]}); }
+      if (boss) Sound.breach(false); else Sound.coin();
+      setTimeout(()=>nextRound(.2), 900);
+    }
+  }
+  function fail(){
+    state = "over"; shake = 18; catMood = -1; say("TRACE DETECTED", "#ff2a6d", 3); status("Trace detected"); Sound.crash();
+    const cleared = round - 1;
+    if (cleared > best){ best = cleared; try { localStorage.setItem("signalhack_best", String(best)); } catch(e){} }
+    $("hBest").textContent = best; $("hFinal").textContent = cleared;
+    $("hMsg").textContent = cleared ? `You cleared ${cleared} round${cleared>1?"s":""}.` + (cleared >= best ? " New record!" : "") : "The ICE caught you on the first signal.";
+    $("hShare").href = "https://x.com/intent/post?text=" + encodeURIComponent(`I cleared ${cleared} rounds of Signal Hack before the ICE traced me. $GLITCH`);
+    onHackEnd(cleared);
+    setTimeout(()=>{ $("hOver").hidden = false; }, 700);
+  }
+  function update(dt){
+    lit = lit.map(v=>Math.max(0, v - dt*3)); msgT = Math.max(0, msgT - dt); shake = Math.max(0, shake - dt*40); catMood *= Math.pow(.3, dt);
+    if (state === "show"){
+      showT += dt; const sp = speed();
+      if (showT >= sp){ showT = 0; if (showI < seq.length){ lit[seq[showI]] = 1; tone(seq[showI]); showI++; } else { state = "input"; pos = 0; trace = 1; status("Your turn"); } }
+    } else if (state === "input"){
+      trace -= dt / Math.max(1.6, 4 - round*.12); if (trace <= 0){ trace = 0; fail(); }
+    }
+    parts = parts.filter(p=>{ p.life -= dt*1.6; p.x += p.vx; p.y += p.vy; p.vy += .08; return p.life > 0; });
+  }
+  function hexPath(x, y, r){ ctx.beginPath(); for (let k=0;k<6;k++){ const a = Math.PI/6 + k*Math.PI/3; k ? ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r) : ctx.moveTo(x+Math.cos(a)*r, y+Math.sin(a)*r); } ctx.closePath(); }
+  function draw(now){
+    if (!W) return;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const gr = ctx.createLinearGradient(0,0,0,H); gr.addColorStop(0,"#0c0622"); gr.addColorStop(.65,"#2a0f45"); gr.addColorStop(1,"#4a1240"); ctx.fillStyle = gr; ctx.fillRect(0,0,W,H);
+    ctx.save(); if (shake) ctx.translate((Math.random()-.5)*shake, (Math.random()-.5)*shake);
+    sky.forEach(b=>{ const x = b.x*W, bw = b.w*W, top = H*(1-b.h) - 40; ctx.fillStyle = b.c ? "#1b0d36" : "#140a2c"; ctx.fillRect(x, top, bw, H-top);
+      ctx.fillStyle = b.c ? "rgba(5,217,232,.3)" : "rgba(255,42,109,.28)"; for (let y=top+8; y<H-30; y+=14) for (let xx=x+5; xx<x+bw-5; xx+=9) if (((xx*7+y*3)|0) % 5 === 0) ctx.fillRect(xx, y, 3, 5); });
+    if (!reduce){ ctx.strokeStyle = "rgba(160,200,255,.2)"; ctx.lineWidth = 1; ctx.beginPath(); rain.forEach(r=>{ r.y += .012*r.s; r.x -= .002*r.s; if (r.y > 1){ r.y = 0; r.x = Math.random()*1.1; } const x = r.x*W, y = r.y*H; ctx.moveTo(x,y); ctx.lineTo(x-3, y+14*r.s); }); ctx.stroke(); }
+    ctx.fillStyle = "#08060f"; ctx.fillRect(0, H-34, W, 34); ctx.fillStyle = "#05d9e8"; ctx.fillRect(0, H-34, W, 2);
+    const g = geo();
+    ctx.strokeStyle = "rgba(139,92,246,.35)"; ctx.lineWidth = 1.5; ctx.setLineDash([4,8]); ctx.lineDashOffset = -now/60; ctx.beginPath(); ctx.arc(g.cx, g.cy, g.R, 0, 7); ctx.stroke(); ctx.setLineDash([]);
+    g.nodes.forEach((n,i)=>{ ctx.strokeStyle = "rgba(255,255,255,.08)"; ctx.beginPath(); ctx.moveTo(g.cx, g.cy); ctx.lineTo(n.x, n.y); ctx.stroke(); });
+    if (boss && BOSS[boss.type].complete){ const D = g.R*.9; ctx.globalAlpha = .9; ctx.drawImage(BOSS[boss.type], g.cx-D/2, g.cy-D/2 + Math.sin(now/500)*4, D, D); ctx.globalAlpha = 1; }
+    else { ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.font = `700 ${Math.round(g.R*.42)}px 'Chakra Petch', sans-serif`; ctx.fillStyle = "rgba(234,246,255,.14)"; ctx.fillText(String(Math.max(round,0)).padStart(2,"0"), g.cx, g.cy); }
+    g.nodes.forEach((n,i)=>{
+      const l = lit[i], c = COLS[i];
+      ctx.save(); ctx.shadowColor = c; ctx.shadowBlur = 8 + l*40;
+      hexPath(n.x, n.y, g.r*(1+l*.12)); ctx.fillStyle = l > .05 ? c : "rgba(10,7,24,.9)"; ctx.globalAlpha = l > .05 ? .35 + l*.65 : 1; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.lineWidth = 2.5; ctx.strokeStyle = c; ctx.stroke(); ctx.restore();
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.font = `700 ${Math.round(g.r*.62)}px sans-serif`; ctx.fillStyle = l > .3 ? "#07060f" : c; ctx.fillText(GL[i], n.x, n.y);
+      ctx.font = "10px 'JetBrains Mono', monospace"; ctx.fillStyle = "rgba(234,246,255,.45)"; ctx.fillText(String(i+1), n.x, n.y + g.r + 12);
+    });
+    if (state === "input"){ const bw = Math.min(260, W*.6), x = W/2 - bw/2, y = g.cy + g.R + g.r + 26; ctx.fillStyle = "rgba(7,6,15,.8)"; ctx.fillRect(x-2, y-2, bw+4, 10); ctx.fillStyle = trace < .3 ? "#ff2a6d" : "#05d9e8"; ctx.fillRect(x, y, bw*trace, 6);
+      ctx.font = "10px 'JetBrains Mono', monospace"; ctx.fillStyle = "#8f92bd"; ctx.textAlign = "center"; ctx.fillText(`TRACE · ${pos}/${seq.length}`, W/2, y + 20); }
+    parts.forEach(p=>{ ctx.globalAlpha = clamp(p.life,0,1); ctx.fillStyle = p.c; ctx.fillRect(p.x, p.y, 3, 3); }); ctx.globalAlpha = 1;
+    const im = CAT[Math.floor(now/220)%4], cw = Math.min(110, H*.17), ch = cw*1.1, cx = W*.5, cy = H - 30 - ch + (catMood > .2 ? -Math.abs(Math.sin(now/90))*10 : 0);
+    if (im.complete){ ctx.save(); if (catMood < -.2) ctx.translate((Math.random()-.5)*8, 0); ctx.drawImage(im, cx - cw/2, cy, cw, ch); ctx.restore(); }
+    if (msgT > 0){ ctx.globalAlpha = Math.min(1, msgT*2); ctx.textAlign = "center"; ctx.textBaseline = "alphabetic"; const fs = Math.min(40, W/12); ctx.font = `700 ${fs}px 'Chakra Petch', sans-serif`;
+      const y = g.cy - g.R - g.r - 22; ctx.fillStyle = "#ff2a6d"; ctx.fillText(msgTxt, W/2-2, y); ctx.fillStyle = "#05d9e8"; ctx.fillText(msgTxt, W/2+2, y); ctx.fillStyle = msgC; ctx.fillText(msgTxt, W/2, y); ctx.globalAlpha = 1; }
+    ctx.restore();
+  }
+  function loop(now){
+    const dt = Math.min(.05, (now - (lastT||now))/1000); lastT = now; T = now;
+    update(dt); draw(now);
+    if (visible) requestAnimationFrame(loop); else running = false;
+  }
+  function kick(){ if (!running){ running = true; lastT = 0; requestAnimationFrame(loop); } }
+  function hit(x, y){ const g = geo(); let best = -1, bd = 1e9; g.nodes.forEach((n,i)=>{ const d = Math.hypot(n.x-x, n.y-y); if (d < bd){ bd = d; best = i; } }); if (bd < g.r*1.3) press(best); }
+  cv.addEventListener("pointerdown", e => { const r = cv.getBoundingClientRect(); hit(e.clientX - r.left, e.clientY - r.top); });
+  addEventListener("keydown", e => { if (!visible || state !== "input") return; const k = +e.key; if (k >= 1 && k <= 6){ e.preventDefault(); press(k-1); } });
+  $("hStart").onclick = start; $("hRetry").onclick = start;
+  size();
+})();
+
+/* ============ MINI-GAME: NEON RUN ============ */
+(function(){
+  const box = $("game"), gc = $("gcv"), g = gc.getContext("2d"), VH = 450;
+  let GW=0, GH=0, gd=1, sc=1, VW=800, state="menu", visible=false, lastT=0, running=false;
+  let P, roofs, drones, chips, floats, dist, chipsN, bonus, speed, gShake, best = 0;
+  try { best = +localStorage.getItem("neonrun_best") || 0; } catch(e){}
+  $("gBest").textContent = best;
+  const sky = Array.from({length:40},(_,k)=>({x:k*46 + Math.random()*30, h:60+Math.random()*190, w:30+Math.random()*40, c:Math.random()<.5}));
+  function size(){ const r = gc.getBoundingClientRect(); gd = Math.min(2, devicePixelRatio||1); GW = r.width; GH = r.height; gc.width = Math.round(GW*gd); gc.height = Math.round(GH*gd); sc = GH/VH; VW = GW/sc; if (state !== "play") render(performance.now()); }
+  new ResizeObserver(size).observe(gc);
+  function reset(){
+    P = {x:140, y:300, vy:0, jumps:0, ground:true, rot:0, trail:[]};
+    roofs = [{x:-40, w:900, y:340}]; drones = []; chips = []; floats = []; dist = 0; chipsN = 0; bonus = 0; speed = 360; gShake = 0;
+    while (roofs[roofs.length-1].x < VW + 600) addRoof();
+  }
+  function addRoof(){
+    const last = roofs[roofs.length-1], gap = 70 + Math.random()*Math.min(170, 60 + speed*.18), w = 160 + Math.random()*320, y = clamp(last.y + (Math.random()-.5)*110, 260, 390);
+    const r = {x:last.x + last.w + gap, w, y}; roofs.push(r);
+    if (Math.random() < .55){ const n = 2 + Math.floor(Math.random()*4); for (let k=0;k<n;k++) chips.push({x:r.x + 40 + k*34, y:r.y - 40 - Math.sin(k/(n-1||1)*Math.PI)*40, got:false}); }
+    if (dist > 300 && Math.random() < .5) drones.push({x:r.x + 60 + Math.random()*(w-80), y:r.y - 60 - Math.random()*90, p:Math.random()*6, dead:false});
+  }
+  function jump(){
+    if (state === "menu" || state === "over"){ start(); return; }
+    if (state !== "play") return;
+    if (P.jumps < 2){ P.vy = P.jumps ? -700 : -780; P.jumps++; P.ground = false; Sound.jump(); }
+  }
+  function start(){ reset(); state = "play"; $("gMenu").hidden = true; $("gOver").hidden = true; $("gPause").hidden = true; kick(); }
+  function over(){
+    state = "over"; const m = Math.floor(dist/40) + bonus; Sound.crash();
+    if (m > best){ best = m; try { localStorage.setItem("neonrun_best", String(best)); } catch(e){} }
+    $("gBest").textContent = best; $("gFinal").textContent = m;
+    $("gMsg").textContent = `${chipsN} data chip${chipsN === 1 ? "" : "s"} grabbed` + (m >= best && m > 0 ? " · new record!" : "");
+    $("gShare").href = "https://x.com/intent/post?text=" + encodeURIComponent(`I ran ${m} m across the rooftops in Neon Run and grabbed ${chipsN} data chips. $GLITCH`);
+    $("gOver").hidden = false; onRunEnd(m, chipsN);
+  }
+  function update(dt){
+    speed = Math.min(900, speed + dt*12); const dx = speed*dt; dist += dx;
+    roofs.forEach(r=>r.x -= dx); drones.forEach(d=>d.x -= dx); chips.forEach(c=>c.x -= dx);
+    roofs = roofs.filter(r=>r.x + r.w > -60); drones = drones.filter(d=>d.x > -60); chips = chips.filter(c=>c.x > -40);
+    while (roofs[roofs.length-1].x < VW + 600) addRoof();
+    const prevY = P.y; P.vy += 2200*dt; P.y += P.vy*dt; P.ground = false;
+    roofs.forEach(r=>{ if (P.x + 14 > r.x && P.x - 14 < r.x + r.w && prevY <= r.y + 1 && P.y >= r.y && P.vy >= 0){ P.y = r.y; P.vy = 0; P.jumps = 0; P.ground = true; } });
+    P.rot = P.ground ? 0 : P.rot + dt*9;
+    chips.forEach(c=>{ if (!c.got && Math.abs(c.x - P.x) < 24 && Math.abs(c.y - (P.y-22)) < 28){ c.got = true; chipsN++; bonus += 2; Sound.coin(); floats.push({x:c.x, y:c.y, t:0, txt:"+2", c:"#05d9e8"}); } });
+    drones.forEach(d=>{ if (d.dead) return; const dy = (P.y-22) - (d.y + Math.sin(performance.now()/300+d.p)*8);
+      if (Math.abs(d.x - P.x) < 30 && Math.abs(dy) < 28){
+        if (P.vy > 0 && dy < -6){ d.dead = true; P.vy = -620; P.jumps = 1; bonus += 5; gShake = 6; Sound.hit(); floats.push({x:d.x, y:d.y, t:0, txt:"HACKED +5", c:"#f5e60a"}); }
+        else { gShake = 14; over(); } } });
+    if (P.y > VH + 60) over();
+    P.trail.unshift({x:P.x, y:P.y}); if (P.trail.length > 8) P.trail.pop();
+    $("gD").textContent = Math.floor(dist/40) + bonus; $("gC").textContent = chipsN;
+  }
+  function render(now){
+    if (!GW) return;
+    g.setTransform(gd,0,0,gd,0,0);
+    const gr = g.createLinearGradient(0,0,0,GH); gr.addColorStop(0,"#0c0622"); gr.addColorStop(.6,"#2a0f45"); gr.addColorStop(1,"#4a1240"); g.fillStyle = gr; g.fillRect(0,0,GW,GH);
+    g.save(); g.scale(sc, sc); if (gShake > 0) g.translate((Math.random()-.5)*gShake, (Math.random()-.5)*gShake);
+    g.fillStyle = "rgba(255,42,109,.9)"; g.beginPath(); g.arc(VW*.78, 110, 48, 0, 7); g.fill();
+    g.fillStyle = "#2a0f45"; for (let k=0;k<6;k++) g.fillRect(VW*.78-60, 92+k*12, 120, 4+k*.6);
+    const off = (dist*.25) % (46*40);
+    sky.forEach(b=>{ const x = ((b.x - off) % (46*40) + 46*40) % (46*40) - 100; if (x > VW + 50) return; g.fillStyle = b.c ? "#1b0d36" : "#160a2c"; g.fillRect(x, 380 - b.h, b.w, b.h + 80);
+      g.fillStyle = b.c ? "rgba(5,217,232,.35)" : "rgba(255,42,109,.3)"; for (let yy=380-b.h+8; yy<380; yy+=14) for (let xx=x+5; xx<x+b.w-5; xx+=9) if (((xx*7+yy*3)|0) % 5 === 0) g.fillRect(xx, yy, 3, 5); });
+    if (!reduce){ g.strokeStyle = "rgba(160,200,255,.18)"; g.beginPath(); for (let k=0;k<50;k++){ const x = (k*97 + now*.5) % (VW+40) - 20, y = (k*53 + now*.9) % VH; g.moveTo(x,y); g.lineTo(x-3, y+12); } g.stroke(); }
+    roofs.forEach(r=>{ g.fillStyle = "#0a0716"; g.fillRect(r.x, r.y, r.w, VH - r.y + 40); g.fillStyle = "#ff2a6d"; g.fillRect(r.x, r.y, r.w, 3);
+      g.fillStyle = "rgba(5,217,232,.25)"; for (let yy=r.y+18; yy<VH; yy+=22) for (let xx=r.x+10; xx<r.x+r.w-10; xx+=26) if (((xx+yy)|0) % 3) g.fillRect(xx, yy, 6, 9); });
+    chips.forEach(c=>{ if (c.got) return; g.save(); g.translate(c.x, c.y + Math.sin(now/200 + c.x)*3); g.rotate(Math.PI/4); g.shadowColor = "#05d9e8"; g.shadowBlur = 12; g.fillStyle = "#05d9e8"; g.fillRect(-6,-6,12,12); g.restore(); });
+    drones.forEach(d=>{ if (d.dead) return; const y = d.y + Math.sin(now/300 + d.p)*8, im = BOSS.drone; if (im.complete) g.drawImage(im, d.x-26, y-26, 52, 52); });
+    if (P){
+      P.trail.forEach((t,k)=>{ g.globalAlpha = .18*(1-k/8); g.fillStyle = k%2 ? "#05d9e8" : "#ff2a6d"; g.fillRect(t.x - 14 - k*6, t.y - 40, 26, 36); }); g.globalAlpha = 1;
+      g.save(); g.translate(P.x, P.y - 24); g.rotate(P.ground ? 0 : Math.sin(P.rot)*.25); const im = CAT[Math.floor(now/90)%4]; if (im.complete) g.drawImage(im, -24, -30, 48, 53); g.restore();
+    }
+    floats = (floats||[]).filter(f=>{ f.t += 1/60; g.globalAlpha = 1 - f.t; g.fillStyle = f.c; g.font = "700 16px 'Chakra Petch', sans-serif"; g.textAlign = "center"; g.fillText(f.txt, f.x, f.y - f.t*40); return f.t < 1; }); g.globalAlpha = 1;
+    g.restore(); gShake = Math.max(0, (gShake||0) - .6);
+  }
+  function loop(now){
+    const dt = Math.min(.033, (now - (lastT||now))/1000); lastT = now;
+    if (state === "play" && visible) update(dt);
+    render(now);
+    if ((state === "play" || gShake > 0) && visible) requestAnimationFrame(loop); else running = false;
+  }
+  function kick(){ if (!running){ running = true; lastT = 0; requestAnimationFrame(loop); } }
+  new IntersectionObserver(es=>es.forEach(e=>{ visible = e.isIntersecting; if (visible) kick(); else if (state === "play"){ state = "pause"; $("gPause").hidden = false; } }), {threshold:.2}).observe(box);
+  $("gStart").onclick = e => { e.stopPropagation(); start(); };
+  $("gRetry").onclick = e => { e.stopPropagation(); start(); };
+  $("gResume").onclick = e => { e.stopPropagation(); state = "play"; $("gPause").hidden = true; kick(); };
+  box.addEventListener("pointerdown", e => { if (e.target.closest("button, a")) return; if (state === "play") jump(); });
+  addEventListener("keydown", e => {
+    if (!visible) return; const k = e.key.toLowerCase();
+    if (k === " " || k === "arrowup" || k === "w"){ if (state === "play" || state === "menu" || state === "over"){ e.preventDefault(); jump(); } }
+    if (k === "p" && (state === "play" || state === "pause")){ const p = state === "play"; state = p ? "pause" : "play"; $("gPause").hidden = !p; if (!p) kick(); }
+  });
+  reset(); size();
+})();
+
+/* ============ SITE MOTION ============ */
+(function(){
+  const A = ["$GLITCH","No presale","Signal Hack","Neon Run","0% tax","Stay glitched"], B = ["Jack in","Break the ICE","Nine lives","Zero permission","Rooftop 7 soon"];
+  document.querySelectorAll("[data-tape]").forEach(el=>{ const one = (el.dataset.tape === "a" ? A : B).map(t=>`<span>${t}<i></i></span>`).join(""); el.innerHTML = one + one + one + one; });
+  const mani = $("mani"), hl = new Set(["boss.","presale.","permission.","glitched.","sleeps."]);
+  mani.innerHTML = mani.textContent.trim().split(/\s+/).map(w=>`<span${hl.has(w.toLowerCase()) ? ' class="hl"' : ''}>${w}</span> `).join("");
+  const words = [...mani.querySelectorAll("span")]; let raf = 0;
+  const upd = () => { raf = 0; const r = mani.getBoundingClientRect(), p = clamp((innerHeight*.85 - r.top)/(r.height + innerHeight*.35), 0, 1), n = Math.round(p*words.length); words.forEach((w,i)=>w.classList.toggle("on", i < n || reduce)); };
+  addEventListener("scroll", ()=>{ if (!raf) raf = requestAnimationFrame(upd); }, {passive:true}); upd();
+  const els = [...document.querySelectorAll("section.block h2, .layer, .tile, .step, .file, .cat-art, .lore, .secret, .comm, .checks li, .wr, .ring, .fair, .contract")];
+  els.forEach(e=>e.classList.add("rv"));
+  const io = new IntersectionObserver(es=>es.forEach(e=>{ if (e.isIntersecting){ e.target.classList.add("in"); if (e.target.id === "ring") e.target.classList.add("draw"); io.unobserve(e.target); } }), {threshold:.15});
+  els.forEach(e=>io.observe(e));
+  document.querySelectorAll(".btn, .chip, nav.links a, .icon-btn, .fab").forEach(el=>el.addEventListener("pointerenter", ()=>Sound.blip()));
+})();
+
+/* ============ START ============ */
+renderProfile();
+</script>
+</body>
+</html>
